@@ -1,9 +1,9 @@
 from models.questions import Questions
 
 def realizar_consulta(req):
-    id = req.json
-    if(id['id'] != ''):
-        dados = Questions.query.filter_by(id=id['id'])
+    dados = req.json
+    if(dados['id'] != ''):
+        dados = Questions.query.filter_by(id=int(dados['id']))
     else:
         dados = Questions.query.all()
     dto = []

@@ -8,27 +8,31 @@
 
 <body>
     
-    <input type="text" id="inputId" >
+    <input type="number" id="inputId" >
     <button onclick="consulta()">Buscar</button>
-    <table border="solid">
+    <table border="solid" id="table">
         <thead>
             <th>ID</th>
             <th>Pergunta</th>
         </thead>
-        <tbody id="corpo"></tbody>
+        
     </table>
 
     <script>
+        window.onload = consulta()
+
         function consulta(){
-        var dadosReq = new Object()
         var input = document.getElementById("inputId")
-        console.log(dadosReq)
-        var envio = JSON.parse(string_envio)
-        var xhttp = new XMLHttpRequest();
+        var dadosReq = {"id": input.value}
+        var str_json = JSON.stringify(dadosReq)
+        const xhttp = new XMLHttpRequest();
         xhttp.open("POST", "http://127.0.0.1:5000/questions/api", false);
-        xhttp.send(dadosReq)
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(str_json)
         var json_resp = JSON.parse(xhttp.responseText)
+        document.getElementById("table").innerHTML = ""
         json_resp.forEach(element => {
+            var tbody = document.createElement("tbody")
             var row = document.createElement("tr")
             var td = document.createElement("td")
             var td2 = document.createElement("td")
@@ -36,7 +40,8 @@
             td2.innerHTML = `<td>${element['pergunta']}</td>`
                 row.appendChild(td)
                 row.appendChild(td2)
-                document.getElementById("corpo").appendChild(row)
+                tbody.appendChild(row)
+                document.getElementById("table").appendChild(tbody)
                                     });
         }
         
