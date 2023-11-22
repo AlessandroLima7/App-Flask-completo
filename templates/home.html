@@ -10,12 +10,8 @@
     
     <input type="number" id="inputId" >
     <button onclick="consulta()">Buscar</button>
+
     <table border="solid" id="table">
-        <thead>
-            <th>ID</th>
-            <th>Pergunta</th>
-        </thead>
-        
     </table>
 
     <script>
@@ -31,17 +27,21 @@
         xhttp.send(str_json)
         var json_resp = JSON.parse(xhttp.responseText)
         document.getElementById("table").innerHTML = ""
+        document.getElementById("table").innerHTML = "<th>ID</th><th>Pergunta</th>"
         json_resp.forEach(element => {
             var tbody = document.createElement("tbody")
             var row = document.createElement("tr")
             var td = document.createElement("td")
             var td2 = document.createElement("td")
+            var thead = document.createElement("th")
             td.innerHTML = `<td>${element['id']}</td>`
             td2.innerHTML = `<td>${element['pergunta']}</td>`
                 row.appendChild(td)
                 row.appendChild(td2)
                 tbody.appendChild(row)
+                
                 document.getElementById("table").appendChild(tbody)
+                
                                     });
         }
         
