@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{titulo}}</title>
+</head>
+
+<body>
+    
+    <input type="text" id="inputId" >
+    <button onclick="consulta()">Buscar</button>
+    <table border="solid">
+        <thead>
+            <th>ID</th>
+            <th>Pergunta</th>
+        </thead>
+        <tbody id="corpo"></tbody>
+    </table>
+
+    <script>
+        function consulta(){
+        var dadosReq = new Object()
+        var input = document.getElementById("inputId")
+        console.log(dadosReq)
+        var envio = JSON.parse(string_envio)
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "http://127.0.0.1:5000/questions/api", false);
+        xhttp.send(dadosReq)
+        var json_resp = JSON.parse(xhttp.responseText)
+        json_resp.forEach(element => {
+            var row = document.createElement("tr")
+            var td = document.createElement("td")
+            var td2 = document.createElement("td")
+            td.innerHTML = `<td>${element['id']}</td>`
+            td2.innerHTML = `<td>${element['pergunta']}</td>`
+                row.appendChild(td)
+                row.appendChild(td2)
+                document.getElementById("corpo").appendChild(row)
+                                    });
+        }
+        
+    </script>
+
+</body>
+</html>
