@@ -10,12 +10,21 @@
     
     <input type="number" id="inputId" >
     <button onclick="consulta()">Buscar</button>
+    <button onclick="excluir()">Excluir</button>
+    <br>
+    <input type="checkbox" id="checkGeral">
 
+    
     <table border="solid" id="table">
     </table>
 
     <script>
         window.onload = consulta()
+
+        function reloadTable() {
+            document.getElementById("table").innerHTML = "<th></th><th>ID</th><th>Pergunta</th>"
+            document.getElementById("checkGeral").checked = false
+        }
 
         function consulta(){
         var input = document.getElementById("inputId")
@@ -26,25 +35,54 @@
         xhttp.setRequestHeader("Content-Type","application/json");
         xhttp.send(str_json)
         var json_resp = JSON.parse(xhttp.responseText)
-        document.getElementById("table").innerHTML = ""
-        document.getElementById("table").innerHTML = "<th>ID</th><th>Pergunta</th>"
+        reloadTable()
         json_resp.forEach(element => {
             var tbody = document.createElement("tbody")
             var row = document.createElement("tr")
-            var td = document.createElement("td")
+            var td0 = document.createElement("td") 
+            var td1 = document.createElement("td")
             var td2 = document.createElement("td")
-            var thead = document.createElement("th")
-            td.innerHTML = `<td>${element['id']}</td>`
+            td0.innerHTML = `<input type="checkbox" id="scales" name="pegar" value="${element['id']}"/>`
+            td1.innerHTML = `<td>${element['id']}</td>`
             td2.innerHTML = `<td>${element['pergunta']}</td>`
-                row.appendChild(td)
+                row.appendChild(td0)
+                row.appendChild(td1)
                 row.appendChild(td2)
                 tbody.appendChild(row)
-                
                 document.getElementById("table").appendChild(tbody)
-                
-                                    });
-        }
+            });}
+
         
+        function excluir(){
+            var checks = document.getElementsByName("pegar")
+            var lista = []
+            var count = 0
+            if(document.getElementById("checkGeral").checked){
+                checks.forEach(element => {
+                    lista.push(element.value)
+                    count += 1
+                })
+            }
+            else{
+                checks.forEach(element => {
+                if(element.checked){
+                    lista.push(element.value)
+                    count += 1}
+                })}
+            var resposta = window.confirm(`Deseja excluir ${count} registros?`)
+            console.log(resposta)
+            if(resposta){
+                var json = {"lista_ids":lista}
+                var str_json = JSON.stringify(json)
+                const xhttp = new XMLHttpRequest();
+                xhttp.open("DELETE", "http://127.0.0.1:5000/questions/api", false);
+                xhttp.setRequestHeader("Content-Type","application/json");
+                xhttp.send(str_json)
+            }
+            
+            consulta()
+
+        }
     </script>
 
 </body>

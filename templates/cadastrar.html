@@ -6,11 +6,21 @@
     <title>{{titulo}}</title>
 </head>
 <body>
-    
-    <form action="{{ url_for('home_bp.cadastrar')}}" method="post">
-        <input type="text" name="pergunta">
-        <button>Cadastrar</button>
-    </form>
+        <input type="text" id="pergunta">
+        <button onclick="cadastrar()">Cadastrar</button>
+    <script>
+        function cadastrar(){
+            var pergunta = document.getElementById("pergunta").value
+            var dadosreq = {"pergunta": pergunta}
+            var str_json = JSON.stringify(dadosreq)
+            const xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "http://127.0.0.1:5000/questions/api/cadastrar", false);
+            xhttp.setRequestHeader("Content-Type","application/json");
+            xhttp.send(str_json)
+            window.alert(JSON.parse(xhttp.responseText)['msg'])
+            window.location.href = "http://127.0.0.1:5000/questions/home"
+        }
+    </script>
 
 
 </body>
